@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TdD 100k — Training HQ</title>
+<style>
+  :root{
+    --ink:#16293B; --ground:#F7F6F2; --accent:#E8602C; --slate:#5A6672;
+    --mist:#E3E9EE; --card:#FFFFFF; --done:#2E7D5B; --done-bg:#EAF4EF;
+    --race:#B33A1B;
+    --disp:"Avenir Next","Futura","Trebuchet MS",system-ui,sans-serif;
+    --body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:var(--body);
+       margin:0;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px 80px}
+
+  header{padding:34px 0 0}
+  .eyebrow{font-family:var(--disp);font-size:12px;letter-spacing:.14em;
+           text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(28px,5vw,40px);
+     margin:6px 0 4px;text-wrap:balance;letter-spacing:-.01em}
+  .sub{color:var(--slate);font-size:15px;margin:0 0 18px}
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+  .chip{background:var(--ink);color:#fff;border-radius:6px;padding:9px 14px;
+        display:flex;flex-direction:column;min-width:118px}
+  .chip.orange{background:var(--accent)}
+  .chip .n{font-family:var(--mono);font-variant-numeric:tabular-nums;
+           font-size:22px;font-weight:700;line-height:1.15}
+  .chip .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+
+  .profile{margin:22px 0 6px;background:var(--card);border:1px solid var(--mist);
+           border-radius:10px;padding:16px 18px 10px}
+  .profile h3{margin:0 0 2px;font-family:var(--disp);font-size:13px;
+              letter-spacing:.1em;text-transform:uppercase;color:var(--slate);font-weight:600}
+  .profile svg{width:100%;height:auto;display:block}
+  .profile .cap{font-size:12px;color:var(--slate);margin:4px 0 4px}
+
+  .progress{display:flex;align-items:center;gap:14px;margin:18px 0 8px}
+  .bar{flex:1;height:10px;background:var(--mist);border-radius:5px;overflow:hidden}
+  .bar>div{height:100%;background:var(--accent);border-radius:5px;width:0;
+           transition:width .4s ease}
+  .progress .txt{font-family:var(--mono);font-variant-numeric:tabular-nums;
+                 font-size:13px;color:var(--slate);white-space:nowrap}
+
+  .zones{background:var(--card);border:1px solid var(--mist);border-radius:10px;
+         padding:18px;margin:26px 0}
+  .zones h2{margin:0 0 4px}
+  h2{font-family:var(--disp);font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .zrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+  .zrow label{font-size:13px;color:var(--slate)}
+  .zrow input[type=number]{font-family:var(--mono);font-size:16px;width:86px;
+        padding:7px 10px;border:1.5px solid var(--mist);border-radius:6px;
+        background:var(--ground);color:var(--ink)}
+  .zrow input:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .zrow .ftpbox{display:flex;align-items:center;gap:8px;margin-left:auto}
+  .seg{display:flex;border:1.5px solid var(--mist);border-radius:6px;overflow:hidden}
+  .seg button{border:0;background:transparent;padding:7px 13px;font-size:13px;
+              cursor:pointer;color:var(--slate);font-family:var(--body)}
+  .seg button.on{background:var(--ink);color:#fff}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  table.zt{width:100%;border-collapse:collapse;font-size:14px}
+  .zt th{font-family:var(--disp);font-size:11px;letter-spacing:.1em;
+         text-transform:uppercase;color:var(--slate);text-align:left;
+         padding:6px 8px;border-bottom:2px solid var(--mist)}
+  .zt td{padding:8px;border-bottom:1px solid var(--mist)}
+  .zt td.bpm{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+  .zt .zn{display:inline-block;width:30px;font-weight:700}
+  .znote{font-size:12.5px;color:var(--slate);margin:10px 0 0}
+
+  .phase{margin:34px 0 0}
+  .phase-head{display:flex;align-items:baseline;gap:12px;border-bottom:3px solid var(--ink);
+              padding-bottom:6px;margin-bottom:16px}
+  .phase-head .tag{font-family:var(--disp);font-weight:700;font-size:13px;color:#fff;
+                   background:var(--ink);padding:3px 10px;border-radius:4px;
+                   letter-spacing:.06em;text-transform:uppercase}
+  .phase-head h2{margin:0;font-size:17px}
+  .phase-head .dates{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--slate)}
+
+  .week{background:var(--card);border:1px solid var(--mist);border-radius:10px;
+        margin:0 0 14px;overflow:hidden}
+  .week.current{border:2px solid var(--accent);box-shadow:0 2px 14px rgba(232,96,44,.14)}
+  .wk-head{display:flex;align-items:center;gap:12px;padding:12px 16px;
+           background:var(--ground);border-bottom:1px solid var(--mist)}
+  .plate{font-family:var(--disp);font-weight:700;font-size:15px;background:var(--ink);
+         color:#fff;border-radius:5px;padding:4px 10px;min-width:46px;text-align:center}
+  .week.current .plate{background:var(--accent)}
+  .wk-head .t{font-weight:600;font-size:14.5px}
+  .wk-head .d{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--slate)}
+  .here{font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.1em;
+        color:var(--accent);text-transform:uppercase}
+  .rides{padding:6px 8px}
+  .ride{display:flex;align-items:flex-start;gap:12px;padding:10px 10px;border-radius:7px;
+        flex-wrap:wrap}
+  .ride:hover{background:var(--ground)}
+  .ride input{width:21px;height:21px;accent-color:var(--done);margin-top:1px;
+              flex-shrink:0;cursor:pointer}
+  .ride .day{font-family:var(--mono);font-size:11.5px;color:var(--slate);width:64px;
+             flex-shrink:0;padding-top:2px;text-transform:uppercase}
+  .ride .what{font-size:14.5px;flex:1;min-width:200px}
+  .ride .what small{display:block;color:var(--slate);font-size:12.5px;margin-top:1px}
+  .ride.done > .what, .ride.done label.what{color:var(--slate);text-decoration:line-through;
+                   text-decoration-color:rgba(46,125,91,.55)}
+  .ride.race{background:linear-gradient(90deg,rgba(232,96,44,.10),transparent)}
+  .ride.race .what{font-weight:700;color:var(--race)}
+  .pill{display:inline-block;font-family:var(--disp);font-size:10.5px;font-weight:600;
+        letter-spacing:.06em;padding:2px 8px;border-radius:99px;margin-left:8px;
+        vertical-align:1px;text-transform:uppercase}
+  .pill.long{background:#E9EFF5;color:var(--ink)}
+  .pill.hard{background:#FBE3D8;color:var(--race)}
+  .pill.easy{background:var(--done-bg);color:var(--done)}
+  .pill.key{background:var(--accent);color:#fff}
+
+  .exp{flex-shrink:0;border:1.5px solid var(--mist);background:var(--card);
+       color:var(--accent);border-radius:6px;font-family:var(--disp);font-size:11px;
+       font-weight:700;letter-spacing:.05em;padding:4px 9px;cursor:pointer;
+       margin-top:1px;text-transform:uppercase}
+  .exp:hover{border-color:var(--accent)}
+  .exp:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .det{flex-basis:100%;margin:8px 0 2px 97px;padding:12px 14px;background:var(--ground);
+       border:1px solid var(--mist);border-left:3px solid var(--accent);
+       border-radius:0 8px 8px 0;font-size:13.5px;color:#2A3742}
+  .det[hidden]{display:none}
+  .det p{margin:5px 0}
+  .det ul{margin:5px 0;padding-left:18px}
+  .det li{margin:4px 0}
+  .det .w{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;
+          color:var(--race);white-space:nowrap}
+  .det .hz{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;
+           color:var(--accent);white-space:nowrap}
+  .det .lbl{font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--slate);display:block;margin:9px 0 2px}
+  .det .lbl:first-child{margin-top:0}
+
+  details.guide{background:var(--card);border:1px solid var(--mist);border-radius:10px;
+          margin:0 0 10px;padding:0}
+  details.guide summary{cursor:pointer;padding:14px 18px;font-family:var(--disp);font-weight:600;
+          font-size:15px;list-style:none;display:flex;align-items:center}
+  details.guide summary::-webkit-details-marker{display:none}
+  details.guide summary::after{content:"+";margin-left:auto;font-size:20px;color:var(--accent);
+                 font-weight:400;transition:transform .15s}
+  details.guide[open] summary::after{transform:rotate(45deg)}
+  details.guide .inner{padding:0 18px 16px;font-size:14px;color:#2A3742}
+  details.guide .inner ul{margin:6px 0;padding-left:20px}
+  details.guide .inner li{margin:6px 0}
+  details.guide:focus-within{outline:1.5px solid var(--accent)}
+
+  .admin .ride .what{font-size:14px}
+  footer{margin-top:44px;font-size:12px;color:var(--slate);border-top:1px solid var(--mist);
+         padding-top:14px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media (max-width:560px){
+    .ride .day{width:46px}
+    .chip{min-width:calc(50% - 5px)}
+    .phase-head .dates{display:none}
+    .det{margin-left:0}
+    .zrow .ftpbox{margin-left:0}
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Training HQ · one 12-week arc</div>
+  <h1>TdD 100k “Countryside”</h1>
+  <p class="sub">104.6 km · ~800 m climbing incl. the Niagara Escarpment · Sunday Sep 27, 2026 · goal: finish strong, ~4:00–4:30. Stratford 43k (Jul 18) rides inside this plan as a milestone.</p>
+  <div class="chips">
+    <div class="chip orange"><span class="n" id="cd-strat">–</span><span class="l">days to Stratford</span></div>
+    <div class="chip"><span class="n" id="cd-tdd">–</span><span class="l">days to TdD 100k</span></div>
+    <div class="chip"><span class="n" id="cd-rides">–</span><span class="l">rides logged</span></div>
+  </div>
+</header>
+
+<div class="profile">
+  <h3>The assignment — TdD course profile</h3>
+  <svg viewBox="0 0 700 120" role="img" aria-label="Course elevation: steep escarpment climb in the first 9 km, rolling plateau, descent at the end">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8602C" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#E8602C" stop-opacity=".06"/>
+    </linearGradient></defs>
+    <line x1="0" y1="100" x2="700" y2="100" stroke="#E3E9EE" stroke-width="1"/>
+    <line x1="0" y1="60" x2="700" y2="60" stroke="#E3E9EE" stroke-width="1" stroke-dasharray="3 4"/>
+    <path d="M0,98 L20,96 L60,38 L90,30 L140,34 L200,26 L260,32 L320,24 L380,30 L440,22 L500,28 L560,26 L610,32 L650,80 L680,96 L700,97 L700,120 L0,120 Z" fill="url(#g)" stroke="#E8602C" stroke-width="2"/>
+    <circle cx="60" cy="38" r="3.5" fill="#16293B"/>
+    <text x="66" y="30" font-size="11" fill="#16293B" font-weight="700">Escarpment km 0–9 · +140 m — ride it EASY</text>
+    <text x="330" y="52" font-size="11" fill="#5A6672">rolling plateau · steady Z2–low Z3 · fuel every 40 min</text>
+    <circle cx="650" cy="80" r="3.5" fill="#16293B"/>
+    <text x="530" y="103" font-size="11" fill="#16293B" font-weight="700">descent — drops, weight back</text>
+  </svg>
+  <p class="cap">You’ll be passed on the climb. You’ll pass them all back by km 60.</p>
+</div>
+
+<div class="progress"><div class="bar"><div id="pbar"></div></div><span class="txt" id="ptxt"></span></div>
+
+<section class="zones">
+  <h2>Zones &amp; power</h2>
+  <div class="zrow">
+    <div class="seg" role="group" aria-label="zone anchor">
+      <button id="m-max" class="on" onclick="setMode('max')">Max HR</button>
+      <button id="m-lthr" onclick="setMode('lthr')">LTHR</button>
+    </div>
+    <label for="anchor" id="anchor-label">Max HR</label>
+    <input type="number" id="anchor" value="191" min="120" max="230">
+    <div class="ftpbox">
+      <label for="ftp">FTP (Zwift watts)</label>
+      <input type="number" id="ftp" value="130" min="80" max="400">
+    </div>
+  </div>
+  <table class="zt" id="ztable"></table>
+  <p class="znote">Anchored to max 191 · FTP 130 (deliberately conservative — real is likely ~140+). After <b>test day (Thu Jul 23)</b>: 30-min TT → switch to LTHR + enter avg HR of final 20 min, and set FTP to the avg power. Ramp Test → stay on Max HR (update only if you exceeded 191), FTP from the test. <b>The FTP box drives every wattage in the session details below.</b> Talk test backup: full sentences = Z2 · short phrases = Z3 · a few words = Z4.</p>
+</section>
+
+<div id="plan"></div>
+
+<section class="phase">
+  <div class="phase-head"><span class="tag" style="background:var(--accent)">Guide</span><h2>The 100k rules</h2></div>
+  <details class="guide"><summary>Fueling — the race-decider</summary><div class="inner"><ul>
+    <li><b>40–60 g carbs/hour from hour one</b>, a feed every ~40 min, 500–750 ml fluid/hour (more in heat).</li>
+    <li>First feed at ~45 min, <i>before</i> you feel empty. Nothing new in the final 30 min.</li>
+    <li>Practice the exact products and timing on every Phase 2+ long ride — the rehearsal locks the menu, then <b>nothing new on race day</b>.</li>
+    <li>Carry ~4 feeds + 2 bottles (water + electrolyte/carb mix); practice grabbing refills at aid stations.</li>
+  </ul></div></details>
+  <details class="guide"><summary>The escarpment (km 0–9)</summary><div class="inner"><ul>
+    <li>~140 m of sustained climbing right at the start — the race’s trap.</li>
+    <li>Low gear, seated, 80+ rpm, <b>Z3 ceiling</b>. Matches burned here cost triple over the next 90 km.</li>
+    <li>Train for it: hill repeats and 15-min KICKR climb sims are in the plan (that’s the escarpment’s duration).</li>
+  </ul></div></details>
+  <details class="guide"><summary>Descending (the route ends downhill)</summary><div class="inner"><ul>
+    <li>The finish descends the escarpment (~260 → 96 m). Practice on the Sep 12 rehearsal.</li>
+    <li>Hands in the drops, weight back, brake <i>before</i> corners — never in them. Calm beats fast.</li>
+  </ul></div></details>
+  <details class="guide"><summary>Comfort = speed at 4+ hours</summary><div class="inner"><ul>
+    <li>Padded bibs + chamois cream on every 60 km+ ride. Any numbness = immediate fit follow-up.</li>
+    <li>Stand 10–15 s every few km on long rides; move hands between tops/hoods/drops.</li>
+    <li>Post-Stratford fit follow-up is part of the plan — tell the fitter about the 4–5 h target.</li>
+  </ul></div></details>
+  <details class="guide"><summary>Pacing the day</summary><div class="inner"><ul>
+    <li>After the climb: <b>Z2–low Z3 all day</b>. If in doubt, slower early — a strong final 25 km is the win condition.</li>
+    <li>Effort steady, speed variable: gear down early on rises, recover on descents.</li>
+    <li>The Sep 12 rehearsal sets the realistic finish target (~4:00–4:30 expected on current trajectory).</li>
+  </ul></div></details>
+</section>
+
+<section class="phase admin">
+  <div class="phase-head"><span class="tag">Admin</span><h2>Do these now</h2></div>
+  <div class="week"><div class="rides" id="admin"></div></div>
+</section>
+
+<footer>Tap <b>details</b> on any ride for the full session (durations, HR bands, Zwift/ERG setup with live watts from your FTP). Rhythm every week: Sat long · Sun easy Z1 · Tue easy/base · Thu quality · Fri rest. Check-offs save on this device.</footer>
+</div>
+
+<script>
+/* ---------- live numbers ---------- */
+const LS="tdd100k";
+const store=JSON.parse(localStorage.getItem(LS)||"{}");
+function save(){localStorage.setItem(LS,JSON.stringify(store))}
+let zmode=store._zmode||"max";
+function anchorVal(){return store._zanchor||(zmode==="max"?191:165)}
+function ftpVal(){return store._ftp||130}
+function zb(){ // zone bounds from current anchor
+  const a=anchorVal();
+  if(zmode==="max")return{z1:Math.round(.68*a)-1,z2l:Math.round(.68*a),z2:Math.round(.75*a),
+    z3l:Math.round(.76*a),z3:Math.round(.83*a),z4l:Math.round(.84*a),z4:Math.round(.90*a)};
+  return{z1:Math.round(.81*a)-1,z2l:Math.round(.81*a),z2:Math.round(.89*a),
+    z3l:Math.round(.90*a),z3:Math.round(.93*a),z4l:Math.round(.94*a),z4:Math.round(.99*a)};
+}
+function W(lo,hi){const f=ftpVal();
+  return `<span class="w">${Math.round(f*lo/100)}–${Math.round(f*hi/100)} W</span> <span style="color:var(--slate)">(${lo}–${hi}% FTP)</span>`}
+function HZ(k){const z=zb();
+  return {z1:`<span class="hz">&lt;${z.z1+1}</span>`,z2:`<span class="hz">${z.z2l}–${z.z2}</span>`,
+    z3:`<span class="hz">${z.z3l}–${z.z3}</span>`,z4:`<span class="hz">${z.z4l}–${z.z4}</span>`}[k]}
+
+/* ---------- session detail builders ---------- */
+const EASY=(min,extra="")=>()=>`
+  <span class="lbl">Session</span>
+  <p><b>${min} min</b>, Z1 (${HZ("z1")} bpm) — genuinely easy, full-conversation pace. Cadence relaxed ~85. ${extra}</p>
+  <span class="lbl">Zwift option</span>
+  <p>Free ride on a flat world (Tempus Fugit / Tick Tock). No workout, no racing — let everyone pass. Recumbent/indoor bike also fine: same duration, HR under ${zb().z1+1}.</p>`;
+const BASE=(min)=>()=>`
+  <span class="lbl">Session</span>
+  <p><b>${min} min</b>, Z1–Z2 (up to ${HZ("z2")} bpm), ~85–90 rpm. Steady, conversational. Outdoors or Zwift flat free-ride.</p>
+  <p>This is base, not a workout — if HR drifts above ${zb().z2}, ease off.</p>`;
+const LONG=(km,hrs,extra="")=>()=>`
+  <span class="lbl">Session</span>
+  <p><b>${km} km (~${hrs})</b> at Z2 (${HZ("z2")} bpm), 85–90 rpm. Effort steady on rises — gear down early, let speed dip. Tires 70/64 before rolling.</p>
+  <span class="lbl">Fueling</span>
+  <p>1 bottle/hour minimum; <b>eat every ~40 min from minute 40</b> (gel/banana/bar — race products). ${extra}</p>`;
+const ZW=(total,blocks,notes="")=>()=>{
+  const n=typeof notes==="function"?notes():notes;
+  return `
+  <span class="lbl">Zwift / KICKR setup (ERG on) · ~${total} min total</span>
+  <ul>${blocks().map(b=>`<li>${b}</li>`).join("")}</ul>
+  ${n?`<p>${n}</p>`:""}
+  <p style="color:var(--slate)">Build it in Workout Builder or ride it from the numbers. HR is the referee: if rep 1 runs hotter/cooler than the target zone, bias ±5%.</p>`};
+
+const DETS={
+ fit:()=>`<span class="lbl">At the fit</span>
+  <p>Bring your riding kit + shoes. Tell the fitter: saddle discomfort history, and BOTH events (2 h race pace Jul 18 + 4–5 h fondo Sep 27). Ask for a sit-bone measurement and saddle assessment; get all numbers documented (saddle height/setback/tilt, reach).</p>
+  <span class="lbl">After</span>
+  <p>20–30 min easy spin in the new position. Note anything that feels different — it should feel neutral-to-better, not worse. Book the post-Stratford follow-up before you leave.</p>`,
+ openers:()=>`<span class="lbl">Session</span>
+  <p>45 min easy (Z1–Z2) with <b>3 × 3 min at Z3 (${HZ("z3")} bpm)</b>, 3 min easy between. Crisp, not hard — legs awake, no fatigue.</p>
+  <span class="lbl">Zwift (ERG)</span>
+  <ul><li>Warmup 12 min ramp 50→65%</li><li>3 × [3 min @ ${W(83,88)} · 3 min @ 50%]</li><li>Cooldown 8 min</li></ul>`,
+ racecheck:()=>`<span class="lbl">Session (outdoor)</span>
+  <p>20–25 km. First 15 min settle in Z2 (${HZ("z2")}), then <b>2 × ~3 km at race effort — Z3 (${HZ("z3")}), in the drops</b>, easy 5 min between. Purpose: confirm the new fit position under load. Flag ANY new niggle to the fitter immediately.</p>
+  <p>Tires 70/64 · both sensors live before rolling.</p>`,
+ easy30:()=>`<span class="lbl">Session</span><p><b>30 min</b> very easy, Z1 only (${HZ("z1")} bpm). Legs loose. Nothing above Z1 — race day is in 48 h.</p>`,
+ stratford:()=>`<span class="lbl">Race script</span>
+  <p>Wake 5:15–5:30 · breakfast 5:30 (oats/toast + banana + honey, coffee) · tires 70/64 + GPS lock 6:45 · <b>roll 7:00</b>.</p>
+  <ul><li>Checkpoints: <b>km 10 → 7:26 · km 20 → 7:50 · km 30 → 8:17 → GO</b> · finish 8:50</li>
+  <li>Feeds at <b>7:42</b> and <b>8:19</b>; sip every 10 min</li>
+  <li>Z3 effort (${HZ("z3")}), drops, 85–90 rpm; effort steady over the gentle rises km 20–30</li>
+  <li>Strong at km 30? Lift to 158–162 for the flat runway. Nothing new today.</li></ul>`,
+ test:()=>`<span class="lbl">Option A — 30-min TT (recommended: FTP + LTHR in one)</span>
+  <ul><li>KICKR <b>ERG OFF</b> (free-ride/SIM — shift gears like the road)</li>
+  <li>Warmup 15 min easy + 3 × 20 s pickups</li>
+  <li><b>30 min all-out steady</b> — start “barely holdable”, even pacing; press LAP at minute 10</li>
+  <li><b>FTP = avg power of the 30 min</b> · <b>LTHR = avg HR of the final 20 min</b></li></ul>
+  <span class="lbl">Option B — Zwift Ramp Test (easier, guided)</span>
+  <ul><li>Workout library → Ramp Test. Steps up each minute until failure; only the last 3–4 min are brutal</li>
+  <li><b>FTP = 75% of best 1-min power</b> (Zwift sets it) · check if max HR beat 191</li></ul>
+  <span class="lbl">Either way</span>
+  <p>KICKR spindown calibration first (Wahoo app) · fresh legs · fan on · 2 bottles · <b>one test only</b>. Enter results in the panel above — every wattage on this page updates.</p>`,
+ hills44:ZW(50,()=>[
+   `Warmup 12 min ramp 50→65% + 3 × 20 s spin-ups`,
+   `4 × [4 min @ ${W(88,92)} · seated · 75–85 rpm · 3 min @ 50%]`,
+   `Cooldown 10 min`],
+   ()=>`Outdoor option: a ~4-min hill (or repeat a shorter one), seated, Z3–4 HR (${HZ("z3")} to low 160s), roll down easy between.`),
+ hills54:ZW(58,()=>[
+   `Warmup 12 min + spin-ups`,
+   `5 × [4 min @ ${W(93,97)} · seated 75–85 rpm · 3.5 min @ 50%]`,
+   `Cooldown 10 min`],
+   `Target HR in reps: Z4. Hold rep 5 = rep 1.`),
+ climb38:ZW(60,()=>[
+   `Warmup 12 min`,
+   `3 × [8 min @ ${W(88,93)} · <b>70–80 rpm</b> (climbing rhythm) · 4 min @ 50%]`,
+   `Cooldown 10 min`],
+   `Or SIM mode: pick a 4–6% Zwift climb, Trainer Difficulty ≥75%, hold Z3–4 seated. This is escarpment prep.`),
+ tempo215:ZW(58,()=>[
+   `Warmup 12 min`,
+   `2 × [15 min @ ${W(83,87)} · 85–90 rpm · 5 min @ 50%]`,
+   `Cooldown 8 min`],
+   ()=>`Tempo = Z3 HR (${HZ("z3")} bpm), comfortably hard, short phrases. Race-stamina work.`),
+ climb310:ZW(65,()=>[
+   `Warmup 12 min`,
+   `3 × [10 min @ ${W(90,94)} · 75–85 rpm · 5 min @ 50%]`,
+   `Cooldown 10 min`],
+   `Z4 reps. The last one should match the first — start conservative.`),
+ tempo220:ZW(70,()=>[
+   `Warmup 12 min`,
+   `2 × [20 min @ ${W(83,88)} · 85–90 rpm · 8 min @ 50%]`,
+   `Cooldown 8 min`],
+   `The biggest tempo session of the build — fondo stamina in the bank.`),
+ escsim:ZW(62,()=>[
+   `Warmup 10 min`,
+   `<b>15 min @ ${W(88,92)} · 70–75 rpm seated</b> — the escarpment, full length`,
+   `8 min easy @ 50%`,
+   `15 min @ ${W(83,86)} · 85–90 rpm — settle into fondo rhythm on tired legs`,
+   `Cooldown 10 min`],
+   `Mimics race structure: climb → recover → steady. Fan on high.`),
+ openers35:ZW(45,()=>[
+   `Warmup 12 min`,
+   `3 × [5 min @ ${W(83,87)} · 3 min @ 50%]`,
+   `Cooldown 8 min`],``),
+ openers33:ZW(38,()=>[
+   `Warmup 10 min`,
+   `3 × [3 min @ ${W(85,88)} · 3 min @ 50%]`,
+   `Cooldown 8 min`],
+   `Taper openers — crisp, never draining.`),
+ rehearsal:()=>`<span class="lbl">The plan-deciding ride</span>
+  <p>Drive to Dundas. <b>80–85 km on the TdD roads</b>, race start time, race breakfast, race kit, full fueling script (feed every 40 min).</p>
+  <ul><li><b>Climb the escarpment</b>: lowest gear, seated, 80+ rpm, Z3 ceiling (${HZ("z3")}) — LAP it</li>
+  <li>Plateau: steady Z2–low Z3, exactly like race day</li>
+  <li><b>Descend the escarpment</b>: drops, weight back, brake before corners — practice calm</li></ul>
+  <span class="lbl">Afterwards</span>
+  <p>Send the file for review — avg speed at race effort sets the official finish target. Then: nothing new before Sep 27.</p>`,
+ prep:()=>`<span class="lbl">Session</span>
+  <p>20–30 min easy spin with 2 × 1 min at race effort.</p>
+  <span class="lbl">Prep checklist</span>
+  <ul><li>Tires 70/64 (gauge) · ROAM + phone charged · sensors checked</li>
+  <li>Pace card printed/taped · feeds packed (4) + 2 bottles mixed</li>
+  <li>Breakfast laid out · kit laid out · drive plan for the morning</li></ul>`,
+ tdd:()=>`<span class="lbl">Race script</span>
+  <ul><li><b>Escarpment (km 0–9):</b> granny gear, seated, 80+ rpm, Z3 ceiling (${HZ("z3")}) — let everyone go</li>
+  <li><b>Plateau:</b> Z2–low Z3 (${HZ("z2")} to low 150s), feed every 40 min from min 45, bottle/hr</li>
+  <li><b>Descent:</b> calm, drops, weight back</li>
+  <li><b>Final 25 km:</b> spend whatever is left — this is the win condition</li></ul>
+  <p>Target ~4:00–4:30 (rehearsal sets the real number). Nothing new today.</p>`
+};
+/* ---------- plan data ---------- */
+const WEEKS=[
+ {ph:"P0",phn:"Phase 0 — Sharpen & race",pd:"Jul 6 – 18",id:"w1",label:"Fit week",dates:"Jul 6–12",from:"2026-07-05",to:"2026-07-12",rides:[
+   {d:"Tue 7",w:"Bike fit (mention BOTH events) + easy spin after",tag:"key",det:DETS.fit},
+   {d:"Thu 9",w:"Easy ride + 3 short openers",s:"settle the new position, flag any niggles",tag:"easy",det:EASY("40–50",'Add 3 × 20 s fast spin-ups (~100 rpm, easy gear) near the end.')},
+   {d:"Sat 11",w:"Race-pace check 20–25 km",s:"a few km at goal pace in the new position · tires 70/64",tag:"long",det:DETS.racecheck},
+   {d:"Sun 12",w:"Easy Z1 spin 40 min",tag:"easy",det:EASY("40")}]},
+ {ph:"P0",id:"w2",label:"Race week",dates:"Jul 13–18",from:"2026-07-13",to:"2026-07-18",rides:[
+   {d:"Tue 14",w:"Easy + 3×3 min openers (Z3)",tag:"easy",det:DETS.openers},
+   {d:"Thu 16",w:"Very easy spin 30 min",tag:"easy",det:DETS.easy30},
+   {d:"Sat 18",w:"🏁 STRATFORD 43k — race day",s:"7:00 roll · ride the card · sub-1:50",race:true,det:DETS.stratford}]},
+ {ph:"P1",phn:"Phase 1 — Mini-recovery + test",pd:"Jul 19 – 24",id:"w3",label:"Recover",dates:"Jul 19–24",from:"2026-07-19",to:"2026-07-24",rides:[
+   {d:"Mon–Wed",w:"Easy Z1 spins only (30–45 min) or rest",tag:"easy",det:EASY("30–45",'Post-race legs: motion is medicine, effort is not.')},
+   {d:"Thu 23",w:"TEST DAY — 30-min TT (ERG off) or Zwift Ramp Test",s:"one test only · results → zones & FTP panel above",tag:"key",det:DETS.test}]},
+ {ph:"P2",phn:"Phase 2 — Base extension",pd:"Jul 25 – Aug 23",id:"w4",label:"Base 1",dates:"Jul 25–31",from:"2026-07-25",to:"2026-07-31",rides:[
+   {d:"Sat 25",w:"45 km Z2 (comfortable reset)",s:"fueling script starts: eat every 40 min",tag:"long",det:LONG(45,"1:50–2:00",'Start locking in race products now.')},
+   {d:"Sun 26",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
+   {d:"Tue 28",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Thu 30",w:"Hill repeats 4×4 min seated (Z3–4)",tag:"hard",det:DETS.hills44}]},
+ {ph:"P2",id:"w5",label:"Base 2",dates:"Aug 1–7",from:"2026-08-01",to:"2026-08-07",rides:[
+   {d:"Sat 1",w:"55 km Z2",tag:"long",det:LONG(55,"2:15–2:30",'Two bottles. Comfort check at the 2 h mark.')},
+   {d:"Sun 2",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
+   {d:"Tue 4",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Thu 6",w:"Hill repeats 5×4 min (Z4), 75–85 rpm seated",tag:"hard",det:DETS.hills54}]},
+ {ph:"P2",id:"w6",label:"Base 3",dates:"Aug 8–14",from:"2026-08-08",to:"2026-08-14",rides:[
+   {d:"Sat 8",w:"65 km Z2 — longest yet",s:"full fueling rehearsal: 40–60 g/hr",tag:"long",det:LONG(65,"2:40–3:00",'Full race fueling: 40–60 g carbs/hr, feed q40 min, plan a refill stop.')},
+   {d:"Sun 9",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
+   {d:"Tue 11",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Thu 13",w:"KICKR climb sim 3×8 min @ 4–6% (Z3–4)",tag:"hard",det:DETS.climb38}]},
+ {ph:"P2",id:"w7",label:"Absorb",dates:"Aug 15–21",from:"2026-08-15",to:"2026-08-21",rides:[
+   {d:"Sat 15",w:"55 km Z2 (step-back week)",tag:"long",det:LONG(55,"2:15–2:30",'Deliberately easier week — solid Z2, no heroics.')},
+   {d:"Sun 16",w:"Easy Z1 spin",tag:"easy",det:EASY("40")},
+   {d:"Tue 18",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45")},
+   {d:"Thu 20",w:"2×15 min tempo (Z3)",tag:"hard",det:DETS.tempo215}]},
+ {ph:"P2",id:"w8",label:"Base 4",dates:"Aug 22–28",from:"2026-08-22",to:"2026-08-28",rides:[
+   {d:"Sat 22",w:"75 km Z2, rolling route",s:"3-hour comfort check — flag anything for the fitter",tag:"long",det:LONG(75,"3:00–3:20",'Stand 10–15 s every 15 min. Note saddle/hands/neck at hour 3 — this is the fit follow-up input.')},
+   {d:"Sun 23",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
+   {d:"Tue 25",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Thu 27",w:"Climbing 3×10 min (Z4)",tag:"hard",det:DETS.climb310}]},
+ {ph:"P3",phn:"Phase 3 — Specificity",pd:"Aug 29 – Sep 13",id:"w9",label:"TdD shape",dates:"Aug 29–Sep 4",from:"2026-08-29",to:"2026-09-04",rides:[
+   {d:"Sat 29",w:"80 km TdD-shaped: climb hard FIRST, long rolling Z2 after",tag:"long",det:()=>`
+     <span class="lbl">Session</span>
+     <p><b>80 km (~3:20–3:40).</b> Front-load the climbing: hit your hilliest local roads (or 2 × 15 min Z3–4) in the first 40 min, then settle into steady Z2 (${HZ("z2")}) for the rest — riding smooth on pre-tired legs is exactly the TdD.</p>
+     <span class="lbl">Fueling</span><p>Full race script. This ride and the rehearsal are the menu-locking rides.</p>`},
+   {d:"Sun 30",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
+   {d:"Tue 1",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Thu 3",w:"2×20 min tempo (Z3)",tag:"hard",det:DETS.tempo220}]},
+ {ph:"P3",id:"w10",label:"Sharpen",dates:"Sep 5–11",from:"2026-09-05",to:"2026-09-11",rides:[
+   {d:"Sat 5",w:"65 km with 20 km at race effort",tag:"long",det:()=>`
+     <span class="lbl">Session</span>
+     <p><b>65 km:</b> ~25 km Z2 → <b>20 km at fondo race effort (upper Z2–low Z3, ${HZ("z2")}–low 150s)</b>, lap-marked → ~20 km Z2 home.</p>
+     <p>Log the block's avg speed + HR — it feeds the race-day pacing target.</p>`},
+   {d:"Sun 6",w:"Easy Z1 spin",tag:"easy",det:EASY("40")},
+   {d:"Tue 8",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45")},
+   {d:"Thu 10",w:"KICKR: 15 min sustained climb + 15 min tempo",s:"escarpment duration rehearsal",tag:"hard",det:DETS.escsim}]},
+ {ph:"P3",id:"w11",label:"Rehearse",dates:"Sep 12–13",from:"2026-09-12",to:"2026-09-13",rides:[
+   {d:"Sat 12",w:"DRESS REHEARSAL — 80–85 km on the TdD roads (Dundas)",s:"climb AND descend the escarpment · full fueling · race start time",tag:"key",det:DETS.rehearsal},
+   {d:"Sun 13",w:"Rest or 30 min very easy",tag:"easy",det:EASY("0–30",'Full rest is equally correct today.')}]},
+ {ph:"P4",phn:"Phase 4 — Taper",pd:"Sep 14 – 26",id:"w12",label:"Taper 1",dates:"Sep 14–20",from:"2026-09-14",to:"2026-09-20",rides:[
+   {d:"Tue 15",w:"Easy Z1–Z2 spin",tag:"easy",det:BASE("40–50")},
+   {d:"Thu 17",w:"3×5 min Z3 openers",tag:"hard",det:DETS.openers35},
+   {d:"Sat 19",w:"50 km easy-moderate",tag:"long",det:LONG(50,"2:00–2:15",'Relaxed. The hay is in the barn.')},
+   {d:"Sun 20",w:"Easy Z1 spin",tag:"easy",det:EASY("40")}]},
+ {ph:"P4",id:"w13",label:"Race week",dates:"Sep 21–27",from:"2026-09-21",to:"2026-09-27",rides:[
+   {d:"Tue 22",w:"Easy Z1 spin",tag:"easy",det:EASY("30–40")},
+   {d:"Thu 24",w:"3×3 min openers",tag:"hard",det:DETS.openers33},
+   {d:"Sat 26",w:"20–30 min spin + bike prep",s:"tires 70/64 · card · fuel packed · computer charged",tag:"easy",det:DETS.prep},
+   {d:"Sun 27",w:"🏁 TdD 100k — RACE DAY",s:"easy up the escarpment · Z2–low Z3 · fuel relentlessly · strong final 25 km",race:true,det:DETS.tdd}]}
+];
+const ADMIN=[
+ {id:"a1",w:"Register for the TdD 100k",s:"fall fondos sell out — this week"},
+ {id:"a2",w:"Book the Dundas rehearsal weekend (Sep 12–13)",s:"~1h15 drive; plan the day"},
+ {id:"a3",w:"Bike fit Jul 7 — mention both events + book post-Stratford follow-up"},
+ {id:"a4",w:"Test day done → zones + FTP updated here and on head unit / Zwift / Strava"}
+];
+
+/* ---------- rendering ---------- */
+function today(){return new Date()}
+function days(to){const d=(new Date(to+"T12:00:00")-today())/864e5;return Math.max(0,Math.ceil(d))}
+function detHTML(det){
+  if(!det)return "";
+  let h=typeof det==="function"?det():det;
+  return h;
+}
+function rideRow(wid,i,r){
+  const key=wid+"-"+i, done=!!store[key];
+  const hasDet=!!r.det;
+  return `<div class="ride ${done?"done":""} ${r.race?"race":""}">
+    <input type="checkbox" id="${key}" ${done?"checked":""} onchange="tick('${key}',this)" aria-label="${r.w}">
+    <span class="day">${r.d}</span>
+    <label class="what" for="${key}">${r.w}${r.tag?`<span class="pill ${r.tag}">${{long:"long",hard:"quality",easy:"easy",key:"key"}[r.tag]}</span>`:""}
+    ${r.s?`<small>${r.s}</small>`:""}</label>
+    ${hasDet?`<button class="exp" aria-expanded="false" onclick="toggleDet(this)">Details ▾</button>
+    <div class="det" hidden>${detHTML(r.det)}</div>`:""}</div>`;
+}
+function toggleDet(btn){
+  const det=btn.parentElement.querySelector(".det");
+  const open=det.hidden;
+  det.hidden=!open;
+  btn.setAttribute("aria-expanded",open?"true":"false");
+  btn.textContent=open?"Hide ▴":"Details ▾";
+}
+function render(){
+  const now=today(); let html="",lastPh="";
+  for(const w of WEEKS){
+    if(w.phn&&w.ph!==lastPh){
+      if(lastPh)html+="</section>";
+      html+=`<section class="phase"><div class="phase-head"><span class="tag">${w.ph}</span><h2>${w.phn}</h2><span class="dates">${w.pd}</span></div>`;
+      lastPh=w.ph;
+    }
+    const cur=now>=new Date(w.from+"T00:00:00")&&now<=new Date(w.to+"T23:59:59");
+    html+=`<div class="week ${cur?"current":""}"><div class="wk-head">
+      <span class="plate">${w.label}</span><span class="t">${cur?'<span class="here">◈ You are here</span> ':""}</span>
+      <span class="d">${w.dates}</span></div><div class="rides">`;
+    w.rides.forEach((r,i)=>html+=rideRow(w.id,i,r));
+    html+="</div></div>";
+  }
+  html+="</section>";
+  document.getElementById("plan").innerHTML=html;
+  document.getElementById("admin").innerHTML=
+    ADMIN.map((a,i)=>rideRow("adm",i,{d:"todo",w:a.w,s:a.s,tag:"key"})).join("");
+  progress();
+}
+function tick(key,el){store[key]=el.checked;save();
+  el.closest(".ride").classList.toggle("done",el.checked);progress()}
+function progress(){
+  let tot=0,done=0;
+  WEEKS.forEach(w=>w.rides.forEach((r,i)=>{tot++;if(store[w.id+"-"+i])done++}));
+  document.getElementById("pbar").style.width=(100*done/tot)+"%";
+  document.getElementById("ptxt").textContent=done+" / "+tot+" rides";
+  document.getElementById("cd-rides").textContent=done;
+}
+
+/* ---------- zones & ftp ---------- */
+document.getElementById("anchor").value=anchorVal();
+document.getElementById("ftp").value=ftpVal();
+function setMode(m){zmode=m;store._zmode=m;
+  document.getElementById("m-max").classList.toggle("on",m==="max");
+  document.getElementById("m-lthr").classList.toggle("on",m==="lthr");
+  document.getElementById("anchor-label").textContent=m==="max"?"Max HR":"LTHR";
+  document.getElementById("anchor").value=store._zanchor||(m==="max"?191:165);
+  save();zones();render()}
+function zones(){
+  const a=+document.getElementById("anchor").value||0;
+  store._zanchor=a;save();
+  const rows=zmode==="max"
+   ?[["Z1","Recovery","< "+Math.round(.68*a)],
+     ["Z2","Endurance",Math.round(.68*a)+" – "+Math.round(.75*a)],
+     ["Z3","Tempo",Math.round(.76*a)+" – "+Math.round(.83*a)],
+     ["Z4","Threshold",Math.round(.84*a)+" – "+Math.round(.90*a)],
+     ["Z5","VO2 max",Math.round(.91*a)+" +"]]
+   :[["Z1","Recovery","< "+Math.round(.81*a)],
+     ["Z2","Endurance",Math.round(.81*a)+" – "+Math.round(.89*a)],
+     ["Z3","Tempo",Math.round(.90*a)+" – "+Math.round(.93*a)],
+     ["Z4","Threshold",Math.round(.94*a)+" – "+Math.round(.99*a)],
+     ["Z5","VO2 max",a+" +"]];
+  document.getElementById("ztable").innerHTML=
+   "<tr><th>Zone</th><th>Name</th><th>bpm</th><th>Talk test</th></tr>"+
+   rows.map((r,i)=>`<tr><td><span class="zn" style="color:${i>=3?"var(--race)":i>=2?"var(--accent)":"var(--done)"}">${r[0]}</span></td><td>${r[1]}</td><td class="bpm">${r[2]}</td><td style="color:var(--slate);font-size:12.5px">${["easy chatting","full sentences","short phrases","a few words","can't talk"][i]}</td></tr>`).join("");
+}
+document.getElementById("anchor").addEventListener("input",()=>{zones();render()});
+document.getElementById("ftp").addEventListener("input",()=>{
+  store._ftp=+document.getElementById("ftp").value||130;save();render()});
+if(zmode==="lthr")setMode("lthr");
+
+/* countdowns */
+document.getElementById("cd-strat").textContent=days("2026-07-18");
+document.getElementById("cd-tdd").textContent=days("2026-09-27");
+render();zones();
+</script>
+
+</body>
+</html>
