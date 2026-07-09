@@ -315,7 +315,12 @@ const DETS={
   <ul><li>Checkpoints: <b>km 10 → 7:26 · km 20 → 7:50 · km 30 → 8:17 → GO</b> · finish 8:50</li>
   <li>Feeds at <b>7:42</b> and <b>8:19</b>; sip every 10 min</li>
   <li>Z3 effort (${HZ("z3")}), drops, 85–90 rpm; effort steady over the gentle rises km 20–30</li>
-  <li>Strong at km 30? Lift to 158–162 for the flat runway. Nothing new today.</li></ul>`,
+  <li>Strong at km 30? Lift to 158–162 for the flat runway. Nothing new today.</li></ul>
+  <span class="lbl">The ride home (~87 km day total)</span>
+  <ul><li><b>5–6 h break in Stratford first:</b> proper lunch early (carbs + protein + salt), refill both bottles, drink through the break, sunscreen before rolling</li>
+  <li>Roll ~2:30–3:00 PM · <b>strictly Z1–Z2 (${HZ("z2")} max)</b> · likely tailwind east · home ~5:00–5:30</li>
+  <li>Legs will be wooden for the first 15 min — spin gently until they wake</li>
+  <li>Feed every ~40 min even at easy pace · bailout plan in pocket (pickup call / taxi) — decide the criteria before the day</li></ul>`,
  test:()=>`<span class="lbl">Option A — 30-min TT (recommended: FTP + LTHR in one)</span>
   <ul><li>KICKR <b>ERG OFF</b> (free-ride/SIM — shift gears like the road)</li>
   <li>Warmup 15 min easy + 3 × 20 s pickups</li>
@@ -402,10 +407,10 @@ const WEEKS=[
  {ph:"P0",id:"w2",label:"Race week",dates:"Jul 13–18",from:"2026-07-13",to:"2026-07-18",rides:[
    {d:"Tue 14",w:"Easy + 3×3 min openers (Z3)",tag:"easy",det:DETS.openers},
    {d:"Thu 16",w:"Very easy spin 30 min",tag:"easy",det:DETS.easy30},
-   {d:"Sat 18",w:"🏁 STRATFORD 43k — race day",s:"7:00 roll · ride the card · sub-1:50",race:true,det:DETS.stratford}]},
+   {d:"Sat 18",w:"🏁 STRATFORD 43k — race day + easy ride home",s:"7:00 roll · ride the card · sub-1:50 · 5–6 h break, then Z1–Z2 home (~87 km day)",race:true,det:DETS.stratford}]},
  {ph:"P1",phn:"Phase 1 — Mini-recovery + test",pd:"Jul 19 – 24",id:"w3",label:"Recover",dates:"Jul 19–24",from:"2026-07-19",to:"2026-07-24",rides:[
    {d:"Mon–Wed",w:"Easy Z1 spins only (30–45 min) or rest",tag:"easy",det:EASY("30–45",'Post-race legs: motion is medicine, effort is not.')},
-   {d:"Thu 23",w:"TEST DAY — 30-min TT (ERG off) or Zwift Ramp Test",s:"one test only · results → zones & FTP panel above",tag:"key",det:DETS.test}]},
+   {d:"Jul 23–26",w:"TEST DAY — 30-min TT (ERG off) or Zwift Ramp Test",s:"one test only · TEST FRESH: after the 87 km race day, slide later if legs are still heavy · results → zones & FTP panel above",tag:"key",det:DETS.test}]},
  {ph:"P2",phn:"Phase 2 — Base extension",pd:"Jul 25 – Aug 23",id:"w4",label:"Base 1",dates:"Jul 25–31",from:"2026-07-25",to:"2026-07-31",rides:[
    {d:"Sat 25",w:"45 km Z2 (comfortable reset)",s:"fueling script starts: eat every 40 min",tag:"long",det:LONG(45,"1:50–2:00",'Start locking in race products now.')},
    {d:"Sun 26",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
@@ -562,6 +567,5 @@ document.getElementById("cd-strat").textContent=days("2026-07-18");
 document.getElementById("cd-tdd").textContent=days("2026-09-27");
 render();zones();
 </script>
-
 </body>
 </html>
