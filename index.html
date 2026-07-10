@@ -378,6 +378,34 @@ const DETS={
    `3 × [3 min @ ${W(85,88)} · 3 min @ 50%]`,
    `Cooldown 8 min`],
    `Taper openers — crisp, never draining.`),
+ gate:()=>`<span class="lbl">✅ Green light — upgrade Tuesdays to quality (ALL must be true)</span>
+  <ul><li>All key sessions completed for 2 consecutive weeks</li>
+  <li>Easy-day HR normal (no drift at usual pace) · morning resting HR stable (±3 bpm)</li>
+  <li>Sleeping well · legs fresh on easy days · motivation good</li>
+  <li>No lingering saddle/knee/back issues from the volume</li></ul>
+  <span class="lbl">If green</span>
+  <p>The three GATED Tuesdays below (Aug 25 · Sep 1 · Sep 8) run as quality sessions — the week becomes the classic 2-interval-day polarized shape. Lower-body lifting drops to 1×/week or moves to Sunday for Phase 3.</p>
+  <span class="lbl">⛔ Rollback triggers (any ONE → Tuesdays return to easy)</span>
+  <ul><li>Can't finish Tue or Thu sessions two weeks running</li>
+  <li>Resting HR +5 bpm for 3+ days · a poor-sleep streak</li>
+  <li>Dead legs on the Saturday long ride two weeks in a row</li>
+  <li>Life load spikes (work, family, travel)</li></ul>
+  <p><b>Rolling back is the plan working, not failing.</b> Tuesday is the pressure valve — Thursday and the long ride always survive.</p>`,
+ thr48:ZW(70,()=>[
+   `Warmup 12 min ramp 50→65% + 3 × 20 s spin-ups`,
+   `4 × [8 min @ ${W(90,94)} · 85–90 rpm · 4 min @ 50%]`,
+   `Cooldown 10 min`],
+   ()=>`<b>GATED:</b> runs only if the Aug 15 gate is green — otherwise ride the usual 45–60 min easy Z1–Z2. The gold-standard threshold staple; HR settles into Z4 (${HZ("z4")}).`),
+ vo254:ZW(65,()=>[
+   `Warmup 12 min + spin-ups`,
+   `5 × [4 min @ ${W(105,110)} · <b>95–100 rpm</b> · 4 min very easy]`,
+   `Cooldown 10 min`],
+   ()=>`<b>GATED:</b> only if the gate is green — otherwise easy Z1–Z2. Hardest session of the build; start it only on fresh legs. HR drifting high-Z4 → Z5 is correct for VO2 work.`),
+ thr310:ZW(60,()=>[
+   `Warmup 12 min`,
+   `3 × [10 min @ ${W(88,92)} · 85–90 rpm · 5 min @ 50%]`,
+   `Cooldown 8 min`],
+   ()=>`<b>GATED:</b> only if the gate is green — otherwise easy Z1–Z2. Deliberately moderate: Saturday is the Dundas rehearsal and it gets fresh legs.`),
  rehearsal:()=>`<span class="lbl">The plan-deciding ride</span>
   <p>Drive to Dundas. <b>80–85 km on the TdD roads</b>, race start time, race breakfast, race kit, full fueling script (feed every 40 min).</p>
   <ul><li><b>Climb the escarpment</b>: lowest gear, seated, 80+ rpm, Z3 ceiling (${HZ("z3")}) — LAP it</li>
@@ -431,11 +459,12 @@ const WEEKS=[
    {d:"Sat 15",w:"55 km Z2 (step-back week)",tag:"long",det:LONG(55,"2:15–2:30",'Deliberately easier week — solid Z2, no heroics.')},
    {d:"Sun 16",w:"Easy Z1 spin",tag:"easy",det:EASY("40")},
    {d:"Tue 18",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45")},
-   {d:"Thu 20",w:"2×15 min tempo (Z3)",tag:"hard",det:DETS.tempo215}]},
+   {d:"Thu 20",w:"2×15 min tempo (Z3)",tag:"hard",det:DETS.tempo215},
+   {d:"Week end",w:"⚖️ GO / NO-GO — two-quality-day upgrade decision",s:"open the details, walk the checklist honestly · green → the three GATED Tuesdays run · red → they stay easy spins",tag:"key",det:DETS.gate}]},
  {ph:"P2",id:"w8",label:"Base 4",dates:"Aug 22–28",from:"2026-08-22",to:"2026-08-28",rides:[
    {d:"Sat 22",w:"75 km Z2, rolling route",s:"3-hour comfort check — flag anything for the fitter",tag:"long",det:LONG(75,"3:00–3:20",'Stand 10–15 s every 15 min. Note saddle/hands/neck at hour 3 — this is the fit follow-up input.')},
    {d:"Sun 23",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
-   {d:"Tue 25",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Tue 25",w:"GATED · Threshold 4×8 — or easy spin if gate is red",s:"upgrade session 1 of 3 · runs only on a green Aug 15 gate",tag:"hard",det:DETS.thr48},
    {d:"Thu 27",w:"Climbing 3×10 min (Z4)",tag:"hard",det:DETS.climb310}]},
  {ph:"P3",phn:"Phase 3 — Specificity",pd:"Aug 29 – Sep 13",id:"w9",label:"TdD shape",dates:"Aug 29–Sep 4",from:"2026-08-29",to:"2026-09-04",rides:[
    {d:"Sat 29",w:"80 km TdD-shaped: climb hard FIRST, long rolling Z2 after",tag:"long",det:()=>`
@@ -443,7 +472,7 @@ const WEEKS=[
      <p><b>80 km (~3:20–3:40).</b> Front-load the climbing: hit your hilliest local roads (or 2 × 15 min Z3–4) in the first 40 min, then settle into steady Z2 (${HZ("z2")}) for the rest — riding smooth on pre-tired legs is exactly the TdD.</p>
      <span class="lbl">Fueling</span><p>Full race script. This ride and the rehearsal are the menu-locking rides.</p>`},
    {d:"Sun 30",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
-   {d:"Tue 1",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Tue 1",w:"GATED · VO2 5×4 — or easy spin if gate is red",s:"upgrade session 2 of 3 · hardest session of the build",tag:"hard",det:DETS.vo254},
    {d:"Thu 3",w:"2×20 min tempo (Z3)",tag:"hard",det:DETS.tempo220}]},
  {ph:"P3",id:"w10",label:"Sharpen",dates:"Sep 5–11",from:"2026-09-05",to:"2026-09-11",rides:[
    {d:"Sat 5",w:"65 km with 20 km at race effort",tag:"long",det:()=>`
@@ -451,7 +480,7 @@ const WEEKS=[
      <p><b>65 km:</b> ~25 km Z2 → <b>20 km at fondo race effort (upper Z2–low Z3, ${HZ("z2")}–low 150s)</b>, lap-marked → ~20 km Z2 home.</p>
      <p>Log the block's avg speed + HR — it feeds the race-day pacing target.</p>`},
    {d:"Sun 6",w:"Easy Z1 spin",tag:"easy",det:EASY("40")},
-   {d:"Tue 8",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45")},
+   {d:"Tue 8",w:"GATED · Threshold 3×10 — or easy spin if gate is red",s:"upgrade session 3 of 3 · kept moderate: rehearsal Saturday",tag:"hard",det:DETS.thr310},
    {d:"Thu 10",w:"KICKR: 15 min sustained climb + 15 min tempo",s:"escarpment duration rehearsal",tag:"hard",det:DETS.escsim}]},
  {ph:"P3",id:"w11",label:"Rehearse",dates:"Sep 12–13",from:"2026-09-12",to:"2026-09-13",rides:[
    {d:"Sat 12",w:"DRESS REHEARSAL — 80–85 km on the TdD roads (Dundas)",s:"climb AND descend the escarpment · full fueling · race start time",tag:"key",det:DETS.rehearsal},
