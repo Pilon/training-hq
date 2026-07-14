@@ -204,14 +204,14 @@
       <button id="m-lthr" onclick="setMode('lthr')">LTHR</button>
     </div>
     <label for="anchor" id="anchor-label">Max HR</label>
-    <input type="number" id="anchor" value="191" min="120" max="230">
+    <input type="number" id="anchor" value="181" min="120" max="230">
     <div class="ftpbox">
       <label for="ftp">FTP (Zwift watts)</label>
-      <input type="number" id="ftp" value="130" min="80" max="400">
+      <input type="number" id="ftp" value="144" min="80" max="400">
     </div>
   </div>
   <table class="zt" id="ztable"></table>
-  <p class="znote">Anchored to max 191 · FTP 130 (deliberately conservative — real is likely ~140+). After <b>test day (Thu Jul 23)</b>: 30-min TT → switch to LTHR + enter avg HR of final 20 min, and set FTP to the avg power. Ramp Test → stay on Max HR (update only if you exceeded 191), FTP from the test. <b>The FTP box drives every wattage in the session details below.</b> Talk test backup: full sentences = Z2 · short phrases = Z3 · a few words = Z4.</p>
+  <p class="znote"><b>Tested Jul 14:</b> LTHR 181 · FTP 144 (30-min TT on Tempus Fugit — valid, even pacing). Zones are now LTHR-anchored — a big upward shift from the old max-HR estimates: proper Z2 endurance is now 147–161. <b>Ease into the new bands over a couple of weeks; the talk test still referees</b> (full sentences = Z2 · short phrases = Z3 · a few words = Z4). The FTP box drives every wattage in the session details below — mirror 144 in Zwift and the new zones on the ROAM + Strava. Retest every 6–8 weeks in the winter block.</p>
 </section>
 
 <div id="plan"></div>
@@ -258,9 +258,9 @@
 const LS="tdd100k";
 const store=JSON.parse(localStorage.getItem(LS)||"{}");
 function save(){localStorage.setItem(LS,JSON.stringify(store))}
-let zmode=store._zmode||"max";
-function anchorVal(){return store._zanchor||(zmode==="max"?191:165)}
-function ftpVal(){return store._ftp||130}
+let zmode=store._zmode||"lthr";
+function anchorVal(){return store._zanchor||(zmode==="max"?191:181)}
+function ftpVal(){return store._ftp||144}
 function zb(){ // zone bounds from current anchor
   const a=anchorVal();
   if(zmode==="max")return{z1:Math.round(.68*a)-1,z2l:Math.round(.68*a),z2:Math.round(.75*a),
@@ -567,7 +567,7 @@ function setMode(m){zmode=m;store._zmode=m;
   document.getElementById("m-max").classList.toggle("on",m==="max");
   document.getElementById("m-lthr").classList.toggle("on",m==="lthr");
   document.getElementById("anchor-label").textContent=m==="max"?"Max HR":"LTHR";
-  document.getElementById("anchor").value=store._zanchor||(m==="max"?191:165);
+  document.getElementById("anchor").value=store._zanchor||(m==="max"?191:181);
   save();zones();render()}
 function zones(){
   const a=+document.getElementById("anchor").value||0;
@@ -589,7 +589,7 @@ function zones(){
 }
 document.getElementById("anchor").addEventListener("input",()=>{zones();render()});
 document.getElementById("ftp").addEventListener("input",()=>{
-  store._ftp=+document.getElementById("ftp").value||130;save();render()});
+  store._ftp=+document.getElementById("ftp").value||144;save();render()});
 if(zmode==="lthr")setMode("lthr");
 
 /* countdowns */
