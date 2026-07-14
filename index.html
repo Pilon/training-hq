@@ -207,11 +207,11 @@
     <input type="number" id="anchor" value="181" min="120" max="230">
     <div class="ftpbox">
       <label for="ftp">FTP (Zwift watts)</label>
-      <input type="number" id="ftp" value="144" min="80" max="400">
+      <input type="number" id="ftp" value="140" min="80" max="400">
     </div>
   </div>
   <table class="zt" id="ztable"></table>
-  <p class="znote"><b>Tested Jul 14:</b> LTHR 181 · FTP 144 (30-min TT on Tempus Fugit — valid, even pacing). Zones are now LTHR-anchored — a big upward shift from the old max-HR estimates: proper Z2 endurance is now 147–161. <b>Ease into the new bands over a couple of weeks; the talk test still referees</b> (full sentences = Z2 · short phrases = Z3 · a few words = Z4). The FTP box drives every wattage in the session details below — mirror 144 in Zwift and the new zones on the ROAM + Strava. Retest every 6–8 weeks in the winter block.</p>
+  <p class="znote"><b>Tested Jul 14</b> (30-min TT, Tempus Fugit — valid, even pacing): <b>LTHR 181</b> (Friel: avg HR of final 20 min, no multiplier) · <b>FTP 140</b> (working value: 30-min avg = 144, Coggan 95%-of-20-min = 136; 140 splits the protocols and HR referees every ERG session anyway). Zones are LTHR-anchored — proper Z2 endurance is now 147–161. <b>Ease into the new bands; the talk test still referees</b> (full sentences = Z2 · short phrases = Z3 · a few words = Z4). Use 140/181 in EVERY tool — Zwift, intervals.icu (override its estimate), ROAM, Strava — and retest with the same 30-min protocol every 6–8 weeks.</p>
 </section>
 
 <div id="plan"></div>
@@ -260,7 +260,7 @@ const store=JSON.parse(localStorage.getItem(LS)||"{}");
 function save(){localStorage.setItem(LS,JSON.stringify(store))}
 let zmode=store._zmode||"lthr";
 function anchorVal(){return store._zanchor||(zmode==="max"?191:181)}
-function ftpVal(){return store._ftp||144}
+function ftpVal(){return store._ftp||140}
 function zb(){ // zone bounds from current anchor
   const a=anchorVal();
   if(zmode==="max")return{z1:Math.round(.68*a)-1,z2l:Math.round(.68*a),z2:Math.round(.75*a),
@@ -589,7 +589,7 @@ function zones(){
 }
 document.getElementById("anchor").addEventListener("input",()=>{zones();render()});
 document.getElementById("ftp").addEventListener("input",()=>{
-  store._ftp=+document.getElementById("ftp").value||144;save();render()});
+  store._ftp=+document.getElementById("ftp").value||140;save();render()});
 if(zmode==="lthr")setMode("lthr");
 
 /* countdowns */
