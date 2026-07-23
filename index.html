@@ -162,7 +162,6 @@
 </style>
 </head>
 <body>
-
 <div class="wrap">
 <header>
   <div class="eyebrow">Training HQ · one 12-week arc</div>
@@ -391,6 +390,11 @@ const DETS={
   <li>Dead legs on the Saturday long ride two weeks in a row</li>
   <li>Life load spikes (work, family, travel)</li></ul>
   <p><b>Rolling back is the plan working, not failing.</b> Tuesday is the pressure valve — Thursday and the long ride always survive.</p>`,
+ ss212:ZW(55,()=>[
+   `Warmup 12 min ramp 50→65%`,
+   `2 × [12 min @ ${W(88,92)} · 85–90 rpm · 4 min @ 50%]`,
+   `Cooldown 5 min`],
+   ()=>`Early quality Tuesday, phase-in 1 of 2 (agreed Jul 23). Rollback rule live: heavy legs or elevated resting HR that morning → 45 min easy instead. No lower-body lifting Monday.`),
  ss312:ZW(70,()=>[
    `Warmup 12 min ramp 50→65% + 3 × 20 s spin-ups`,
    `3 × [12 min @ ${W(88,92)} · 85–90 rpm · 4 min @ 50%]`,
@@ -450,12 +454,12 @@ const WEEKS=[
  {ph:"P2",id:"w5",label:"Base 2",dates:"Jul 25–31",from:"2026-07-25",to:"2026-07-31",rides:[
    {d:"Sat 25",w:"55 km Z2",tag:"long",det:LONG(55,"2:15–2:30",'Two bottles. Comfort check at the 2 h mark.')},
    {d:"Sun 26",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
-   {d:"Tue 28",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Tue 28",w:"Sweet Spot 2×12 — early quality Tuesday (phase-in 1/2)",s:"3-day weeks start here, 3 weeks ahead of the gate · rollback rule live",tag:"hard",det:DETS.ss212},
    {d:"Thu 30",w:"Hill repeats 5×4 min (Z4), 75–85 rpm seated",tag:"hard",det:DETS.hills54}]},
  {ph:"P2",id:"w6",label:"Base 3",dates:"Aug 1–7",from:"2026-08-01",to:"2026-08-07",rides:[
    {d:"Sat 1",w:"65 km Z2 — longest yet",s:"full fueling rehearsal: 40–60 g/hr",tag:"long",det:LONG(65,"2:40–3:00",'Full race fueling: 40–60 g carbs/hr, feed q40 min, plan a refill stop.')},
    {d:"Sun 2",w:"Easy Z1 spin",tag:"easy",det:EASY("40–45")},
-   {d:"Tue 4",w:"Easy/base Z1–Z2",tag:"easy",det:BASE("45–60")},
+   {d:"Tue 4",w:"Sweet Spot 3×12 — early quality Tuesday (phase-in 2/2)",s:"full gated session #1, pulled 3 weeks early · Aug 11 returns to easy (absorb week)",tag:"hard",det:DETS.ss312},
    {d:"Thu 6",w:"KICKR climb sim 3×8 min @ 4–6% (Z3–4)",tag:"hard",det:DETS.climb38}]},
  {ph:"P2",id:"w7",label:"Absorb",dates:"Aug 8–14",from:"2026-08-08",to:"2026-08-14",rides:[
    {d:"Sat 8",w:"55 km Z2 (step-back week)",tag:"long",det:LONG(55,"2:15–2:30",'Deliberately easier week — solid Z2, no heroics.')},
